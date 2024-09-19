@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Quadra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Agendamento de Quadra Esportiva</h1>
+        <form id="bookingForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="date">Data:</label>
+            <input type="date" id="date" name="date" required>
+            
+            <fieldset>
+                <legend>Horários Disponíveis                    
+                </legend>           
+            <select name="time" class="time">
+              <option value="time" selected=>Selecione um horário</option>
+              <option>17:00</option>
+              <option>18:00</option> 
+              <option>19:00</option>
+              <option>20:00</option>                      
+            </select>  	
+            </fieldset><br><br>	
+            
+            <button type="submit">Agendar</button>
+            <button id="viewBookings">Ver Horários Agendados</button>
+        <div id="message"></div>
+        <div id="bookingsList"></div>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+//////
+document.getElementById('bookingForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    
+    const response = await fetch('http://localhost:3000/bookings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, date, time })
+    });
+    
+    const result = await response.json();
+    
+    document.getElementById('message').textContent = result.message;
+});
+
+document.getElementById('viewBookings').addEventListener('click', async function() {
+    const response = await fetch('http://localhost:3000/bookings');
+    const bookings = await response.json();
+    
+    const bookingsList = document.getElementById('bookingsList');
+    bookingsList.innerHTML = '';
+    
+    bookings.forEach(booking => {
+        const bookingItem = document.createElement('div');
+        bookingItem.className = 'booking-item';
+        bookingItem.textContent = `Nome: ${booking.name}, Data: ${booking.date}, Hora: ${booking.time}`;
+        bookingsList.appendChild(bookingItem);
+    });
+});
+
+#///////
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const port = 3000;
+
+app.use(cors());
+app.use(express.json());
+
+let bookings = [];
+
+app.post('/bookings', (req, res) => {
+    const { name, date, time } = req.body;
+    bookings.push({ name, date, time });
+    res.json({ message: 'Agendamento realizado com sucesso!' });
+});
+
+app.get('/bookings', (req, res) => {
+    res.json(bookings);
+});
+
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
+});
+
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5eeee;
+    display:contents;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#message {
+    margin-top: 20px;
+    color: green;
+}
+.label_Serv{
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;   
+}
+#bookingsList {
+    margin-top: 20px;
+}
+
+.booking-item {
+    background-color: #e9ecef;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
