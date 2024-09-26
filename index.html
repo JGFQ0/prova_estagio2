@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -10,29 +9,45 @@
     <div class="container">
         <h1>Agendamento de Quadra Esportiva</h1>
         <form id="agendForm">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="name" required>
-            
-            <label for="data">Data:</label>
-            <input type="date" id="data" name="data" required>
             
             <fieldset>
-                <legend>Horários Disponíveis                    
-                </legend>           
-            <select id="horario" class="time" required>
-              <option value="time" selected=>Selecione um horário</option>
-              <option>17:00</option>
-              <option>18:00</option> 
-              <option>19:00</option>
-              <option>20:00</option>                      
-            </select>  	
-            </fieldset><br><br>	
+                <div class="row">
+                    <div class="column">
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
             
+                    <div class="column">
+                        <label for="esporte">Esportes </label>
+                        <select id="esporte" name="esporte" required>
+                            <option value="futebol">Futebol</option>
+                            <option value="volei">Vôlei</option>
+                        </select>
+                    </div>
+                </div>
+
+                <fieldset>
+                    <div class="row">
+                        <div class="column">
+                            <label for="data">Data:</label>
+                            <input type="date" id="data" name="data" required>
+                        </div>
+                        <div class="column">
+                            <label for="horario">Horários Disponíveis:</label>
+                            <select id="horario" name="horario" required>
+                                <option>08:00</option>
+                                <option>09:00</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+            </fieldset>
             <button type="submit">Agendar</button>
-            <button id="verAgendamentos">Ver Horários Agendados</button>
+        </form>
+
+        <a href="agendamentos.html"><button>Ver Horários Agendados</button>
         <div id="message"></div>
         <div id="listaDAgend"></div>
-        </form>
     </div>
     <script src="script.js"></script>
 </body>
