@@ -47,6 +47,35 @@ app.get('/agendamento', (req, res) => {
     });
 });
 
+app.put('/agendamento/:id', (req, res) => {
+    const { nome, data, horario, esporte } = req.body;
+    const { id } = req.params;
+
+    const query = 'UPDATE agendamentos SET nome = ?, data = ?, horario = ?, esporte = ? WHERE id = ?';
+    db.query(query, [nome, data, horario, esporte, id], (err, result) => {
+        if (err) {
+            console.error('Erro ao atualizar agendamento:', err);
+            res.status(500).json({ message: 'Erro ao atualizar agendamento' });
+            return;
+        }
+        res.json({ message: 'Agendamento atualizado com sucesso!' });
+    });
+});
+
+app.delete('/agendamento/:id', (req, res) => {
+    const { id } = req.params;
+
+    const query = 'DELETE FROM agendamentos WHERE id = ?';
+    db.query(query, [id], (err, result) => {
+        if (err) {
+            console.error('Erro ao deletar agendamento:', err);
+            res.status(500).json({ message: 'Erro ao deletar agendamento' });
+            return;
+        }
+        res.json({ message: 'Agendamento deletado com sucesso!' });
+    });
+});
+
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });

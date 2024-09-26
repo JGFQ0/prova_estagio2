@@ -18,18 +18,3 @@ document.getElementById('agendForm').addEventListener('submit', async function(e
     
     document.getElementById('message').textContent = result.message;
 });
-
-document.getElementById('verAgendamentos').addEventListener('click', async function() {
-    const response = await fetch('http://localhost:3000/agendamento');
-    const agendamentos = await response.json();
-    
-    const agendamentosList = document.getElementById('listaDAgend');
-    agendamentosList.innerHTML = '';
-    
-    agendamentos.forEach(agendamento => {
-        const agendamentoItem = document.createElement('div');
-        agendamentoItem.className = 'agendamento-item';
-        agendamentoItem.textContent = `Nome: ${agendamento.nome}, Data: ${agendamento.data}, Hora: ${agendamento.horario}, Esporte: ${agendamento.esporte}`;
-        agendamentosList.appendChild(agendamentoItem);
-    });
-});
