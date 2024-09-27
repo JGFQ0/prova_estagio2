@@ -1,81 +1,83 @@
-const express = require('express');
-const cors = require('cors');
-const mysql = require('mysql');
-const app = express();
-const port = 3000;
+const express = require('express')
+const cors = require('cors')
+const mysql = require('mysql')
+const app = express()
+const port = 3000
 
-app.use(cors());
-app.use(express.json());
+app.use(cors())
+app.use(express.json())
 
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'web_banco'
-});
+})
 
 db.connect((err) => {
     if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-        return;
+        console.error('Erro ao conectar ao banco de dados:', err)
+        return
     }
-    console.log('Conectado ao banco de dados MySQL');
-});
+    console.log('Conectado ao banco de dados MySQL')
+})
 
 app.post('/agendamento', (req, res) => {
-    const { nome, data, horario, esporte } = req.body;
-    const query = 'INSERT INTO agendamentos (nome, data, horario,esporte) VALUES (?, ?, ?, ?)';
-    db.query(query, [nome, data, horario,esporte], (err, result) => {
+    const { nome, data, horario, esporte, esporte_id } = req.body
+    const query = 'INSERT INTO agendamentos (nome, data, horario, esporte, esporte_id) VALUES (?, ?, ?, ?, ?)'
+    db.query(query, [nome, data, horario, esporte, esporte_id], (err, result) => {
         if (err) {
-            console.error('Erro ao inserir agendamento:', err);
-            res.status(500).json({ message: 'Erro ao realizar agendamento' });
-            return;
+            console.error('Erro ao inserir agendamento:', err)
+            res.status(500).json({ message: 'Erro ao realizar agendamento' })
+            return
         }
-        res.json({ message: 'Agendamento realizado com sucesso!' });
-    });
-});
+        res.json({ message: 'Agendamento realizado com sucesso!' })
+    })
+})
 
 app.get('/agendamento', (req, res) => {
-    const query = 'SELECT * FROM agendamentos';
-    db.query(query, (err, results) => {
+    const nome = req.query.nome ? `%${req.query.nome}%` : '%'
+    const query = 'SELECT * FROM agendamentos WHERE nome LIKE ?'
+
+    db.query(query, [nome], (err, results) => {
         if (err) {
-            console.error('Erro ao buscar agendamentos:', err);
-            res.status(500).json({ message: 'Erro ao buscar agendamentos' });
-            return;
+            console.error('Erro ao buscar agendamentos:', err)
+            res.status(500).json({ message: 'Erro ao buscar agendamentos' })
+            return
         }
-        res.json(results);
-    });
-});
+        res.json(results)
+    })
+})
 
 app.put('/agendamento/:id', (req, res) => {
-    const { nome, data, horario, esporte } = req.body;
-    const { id } = req.params;
+    const { nome, data, horario, esporte } = req.body
+    const { id } = req.params
 
-    const query = 'UPDATE agendamentos SET nome = ?, data = ?, horario = ?, esporte = ? WHERE id = ?';
+    const query = 'UPDATE agendamentos SET nome = ?, data = ?, horario = ?, esporte = ? WHERE id = ?'
     db.query(query, [nome, data, horario, esporte, id], (err, result) => {
         if (err) {
-            console.error('Erro ao atualizar agendamento:', err);
-            res.status(500).json({ message: 'Erro ao atualizar agendamento' });
-            return;
+            console.error('Erro ao atualizar agendamento:', err)
+            res.status(500).json({ message: 'Erro ao atualizar agendamento' })
+            return
         }
-        res.json({ message: 'Agendamento atualizado com sucesso!' });
-    });
-});
+        res.json({ message: 'Agendamento atualizado com sucesso!' })
+    })
+})
 
 app.delete('/agendamento/:id', (req, res) => {
-    const { id } = req.params;
+    const { id } = req.params
 
-    const query = 'DELETE FROM agendamentos WHERE id = ?';
+    const query = 'DELETE FROM agendamentos WHERE id = ?'
     db.query(query, [id], (err, result) => {
         if (err) {
-            console.error('Erro ao deletar agendamento:', err);
-            res.status(500).json({ message: 'Erro ao deletar agendamento' });
-            return;
+            console.error('Erro ao deletar agendamento:', err)
+            res.status(500).json({ message: 'Erro ao deletar agendamento' })
+            return
         }
-        res.json({ message: 'Agendamento deletado com sucesso!' });
-    });
-});
+        res.json({ message: 'Agendamento deletado com sucesso!' })
+    })
+})
 
 app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
-});
+    console.log(`Servidor rodando em http://localhost:${port}`)
+})

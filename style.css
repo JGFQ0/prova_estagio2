@@ -111,3 +111,16 @@ input, select {
 .btnEditar:hover, .btnSalvar:hover, .btnDeletar:hover {
     background-color: #282188;
 }
+.campoBuscar{
+    margin-left: 24%;
+    width: 50%;
+}
+
+.campoBuscar input{
+    border: 1px solid grey;
+    text-align: center;
+}
+
+.campoBuscar input:hover{
+    border: 1px blue solid;
+}

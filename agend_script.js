@@ -1,14 +1,24 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const agendItensDiv = document.getElementById('agendItens')
+    const inputBuscar = document.getElementById('inputBuscar')
 
-    // Função para buscar os agendamentos
-    async function fetchAgendamentos() {
-        const response = await fetch('http://localhost:3000/agendamento');
-        const data = await response.json();
+    // Função para buscar os agendamentos com filtro opcional
+    async function fetchAgendamentos(nome = '') {
+        const response = await fetch(`http://localhost:3000/agendamento?nome=${encodeURIComponent(nome)}`)
+        
+        if (!response.ok) {
+            console.error('Erro ao buscar agendamentos:', response.statusText)
+            return
+        }
+
+        const data = await response.json()
+
+        // Limpar itens anteriores
+        agendItensDiv.innerHTML = ''
 
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            const year = date.getFullYear();
+            const date = new Date(dateString)
+            const year = date.getFullYear()
             const month = String(date.getMonth() + 1).padStart(2, '0')
             const day = String(date.getDate()).padStart(2, '0')
             return `${year}-${month}-${day}`
@@ -50,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </select>
                 </div>
                 <button class="btnEditar" onclick="editarAgendamentos(${item.id})">Editar</button>
-                <button class="btnSalvar" onclick="salvarAgendamentos(${item.id})" style="display:none;">Salvar</button>
+                <button class="btnSalvar" onclick="salvarAgendamentos(${item.id})" style="display:none">Salvar</button>
                 <button class="btnDeletar" onclick="deletarAgendamentos(${item.id})">Deletar</button>
             </fieldset>
             `
@@ -58,7 +68,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
     }
 
-    // Função para habilitar edição
+    // Adicionar evento de tecla 'Enter' no campo de busca
+    inputBuscar.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            const nome = inputBuscar.value.trim()
+            fetchAgendamentos(nome)
+        }
+    })
+
+    // Habilitar edição
     window.editarAgendamentos = (id) => {
         const div = document.getElementById(`agendamento-${id}`)
         const inputs = div.querySelectorAll('input')
@@ -66,17 +84,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const editButton = div.querySelector('.btnEditar')
         const saveButton = div.querySelector('.btnSalvar')
 
-        inputs.forEach(input => input.disabled = false);
-        selects.forEach(select => select.disabled = false);
-        editButton.style.display = 'none' // Esconde o botão de editar
-        saveButton.style.display = 'inline' // Mostra o botão de salvar
-    };
+        inputs.forEach(input => input.disabled = false)
+        selects.forEach(select => select.disabled = false)
+        editButton.style.display = 'none'
+        saveButton.style.display = 'inline'
+    }
 
-    // Função para salvar agendamento
+    // Salvar agendamento
     window.salvarAgendamentos = async (id) => {
-        const div = document.getElementById(`agendamento-${id}`);
-        const inputs = div.querySelectorAll('input');
-        const selects = div.querySelectorAll('select');
+        const div = document.getElementById(`agendamento-${id}`)
+        const inputs = div.querySelectorAll('input')
+        const selects = div.querySelectorAll('select')
 
         const updatedData = {
             nome: inputs[0].value,
@@ -97,14 +115,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert('Atualização de agendamento feita com sucesso.')
             inputs.forEach(input => input.disabled = true)
             selects.forEach(select => select.disabled = true)
-            div.querySelector('.btnEditar').style.display = 'inline' // Mostra o botão de editar
-            div.querySelector('.btnSalvar').style.display = 'none' // Esconde o botão de salvar
+            div.querySelector('.btnEditar').style.display = 'inline'
+            div.querySelector('.btnSalvar').style.display = 'none'
         } else {
             alert('Erro ao atualizar agendamento.')
         }
     }
 
-    // Função de Delete
+    // Deletar agendamento
     window.deletarAgendamentos = async (id) => {
         const response = await fetch(`http://localhost:3000/agendamento/${id}`, {
             method: 'DELETE',
@@ -118,6 +136,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Chamar a função para buscar os agendamentos
     fetchAgendamentos()
 })
