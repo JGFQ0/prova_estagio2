@@ -24,5 +24,9 @@ document.getElementById('agendForm').addEventListener('submit', async function(e
 
     const result = await response.json()
     
-    document.getElementById('message').textContent = result.message
+    if (response.ok) {
+        alert('Agendamento feito com sucesso.')
+    } else {
+        alert('Erro ao realizar agendamento.')
+    }
 })

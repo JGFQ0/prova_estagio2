@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 27/09/2024 às 21:52
+-- Tempo de geração: 29/09/2024 às 02:09
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.0.30
 
@@ -35,18 +35,6 @@ CREATE TABLE `agendamentos` (
   `data` date NOT NULL,
   `horario` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `agendamentos`
---
-
-INSERT INTO `agendamentos` (`id`, `nome`, `esporte`, `esporte_id`, `data`, `horario`) VALUES
-(38, 'Teste1', 'Futebol', 1, '2024-09-04', '08:00:00'),
-(39, 'Teste1', 'Vôlei', 2, '2024-09-04', '09:00:00'),
-(40, 'Gabriel', 'Futebol', 1, '2024-09-18', '09:00:00'),
-(41, 'Gabriel', 'Vôlei', 2, '2024-09-18', '08:00:00'),
-(42, 'Teste2', 'Futebol', 1, '2024-09-03', '08:00:00'),
-(43, 'Teste1', 'Futebol', 1, '2024-09-26', '08:00:00');
 
 -- --------------------------------------------------------
 
@@ -93,13 +81,13 @@ ALTER TABLE `esportes`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de tabela `esportes`
 --
 ALTER TABLE `esportes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- Restrições para tabelas despejadas

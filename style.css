@@ -81,11 +81,6 @@ input, select {
     background-color: #218838;
 }
 
-#message {
-    margin-top: 20px;
-    color: green;
-}
-
 #agendForm {
     padding: 10px;
 }
