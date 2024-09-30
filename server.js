@@ -22,6 +22,7 @@ db.connect((err) => {
     console.log('Conectado ao banco de dados MySQL')
 })
 
+// Método POST para inserir valores no banco de dados
 app.post('/agendamento', (req, res) => {
     const { nome, data, horario, esporte, esporte_id } = req.body
     const query = 'INSERT INTO agendamentos (nome, data, horario, esporte, esporte_id) VALUES (?, ?, ?, ?, ?)'
@@ -35,6 +36,7 @@ app.post('/agendamento', (req, res) => {
     })
 })
 
+// Método GET para fazer as buscas filtradas
 app.get('/agendamento', (req, res) => {
     const nome = req.query.nome ? `%${req.query.nome}%` : '%'
     const query = 'SELECT * FROM agendamentos WHERE nome LIKE ?'
@@ -49,6 +51,7 @@ app.get('/agendamento', (req, res) => {
     })
 })
 
+// Método PUT para fazer as atualizações de dados com base no id
 app.put('/agendamento/:id', (req, res) => {
     const { nome, data, horario, esporte } = req.body
     const { id } = req.params
@@ -64,6 +67,7 @@ app.put('/agendamento/:id', (req, res) => {
     })
 })
 
+// Método DELETE para deletar os dados com base no id
 app.delete('/agendamento/:id', (req, res) => {
     const { id } = req.params
 

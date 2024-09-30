@@ -6,7 +6,7 @@ document.getElementById('agendForm').addEventListener('submit', async function(e
     const horario = document.getElementById('horario').value
     const esporte = document.getElementById('esporte').value
 
-    // Definindo o esporte_id com base na escolha do usuário
+    // Atualiza a coluna 'esporte_id' na tabela "agendamentos"
     let esporte_id
     if (esporte === 'Futebol') {
         esporte_id = 1
@@ -14,6 +14,7 @@ document.getElementById('agendForm').addEventListener('submit', async function(e
         esporte_id = 2
     }
 
+    // Função que usa o método POST para inserir dados na tabela 'agendamentos'
     const response = await fetch('http://localhost:3000/agendamento', {
         method: 'POST',
         headers: {

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const agendItensDiv = document.getElementById('agendItens')
     const inputBuscar = document.getElementById('inputBuscar')
 
-    // Função para buscar os agendamentos com filtro opcional
+    // Função para fazer a busca de agendamentos pelo nome
     async function fetchAgendamentos(nome = '') {
         const response = await fetch(`http://localhost:3000/agendamento?nome=${encodeURIComponent(nome)}`)
         
@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const data = await response.json()
 
-        // Limpar itens anteriores
         agendItensDiv.innerHTML = ''
 
         function formatDate(dateString) {
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return `${year}-${month}-${day}`
         }
 
-        // Criar inputs para cada agendamento
+        // Cria divs referentes aos rows no banco de dados
         data.forEach(item => {
             const div = document.createElement('div')
             div.id = `agendamento-${item.id}`
@@ -55,8 +54,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <label>Horário:</label>
                     </div>
                     <select class="opções2" disabled>
-                        <option value="08:00" ${item.horario === '08:00' ? 'selected' : ''}>08:00</option>
-                        <option value="09:00" ${item.horario === '09:00' ? 'selected' : ''}>09:00</option>
+                        <option value="08:00" ${item.horario === '08:00:00' ? 'selected' : ''}>08:00</option>
+                        <option value="09:00" ${item.horario === '09:00:00' ? 'selected' : ''}>09:00</option>
+                        <option value="16:00" ${item.horario === '16:00:00' ? 'selected' : ''}>16:00</option>
+                        <option value="17:00" ${item.horario === '17:00:00' ? 'selected' : ''}>17:00</option>
                     </select>
                 </div>
                 <button class="btnEditar" onclick="editarAgendamentos(${item.id})">Editar</button>
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
     }
 
-    // Adicionar evento de tecla 'Enter' no campo de busca
+    // Ao apertar enter, as buscas são feitas
     inputBuscar.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             const nome = inputBuscar.value.trim()
@@ -76,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     })
 
-    // Habilitar edição
+    // Função para habilitar o modo de edição
     window.editarAgendamentos = (id) => {
         const div = document.getElementById(`agendamento-${id}`)
         const inputs = div.querySelectorAll('input')
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveButton.style.display = 'inline'
     }
 
-    // Salvar agendamento
+    // Salva as mudanças
     window.salvarAgendamentos = async (id) => {
         const div = document.getElementById(`agendamento-${id}`)
         const inputs = div.querySelectorAll('input')
@@ -122,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Deletar agendamento
+    // Deleta um item da lista de agendamentos
     window.deletarAgendamentos = async (id) => {
         const response = await fetch(`http://localhost:3000/agendamento/${id}`, {
             method: 'DELETE',
