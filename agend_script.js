@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const agendItensDiv = document.getElementById('agendItens')
     const inputBuscar = document.getElementById('inputBuscar')
 
-    // Função para fazer a busca de agendamentos pelo nome
+    // Função para fazer a busca de agendamentos filtrada pelo nome
     async function fetchAgendamentos(nome = '') {
         const response = await fetch(`http://localhost:3000/agendamento?nome=${encodeURIComponent(nome)}`)
         
@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         agendItensDiv.innerHTML = ''
 
+        // Função para que a data apareça de maneira funcional na listagem
         function formatDate(dateString) {
             const date = new Date(dateString)
             const year = date.getFullYear()
@@ -104,6 +105,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             esporte: selects[0].value
         }
 
+        // O objeto updatedData após receber os novos valores inseridos pelo usuário...
+        // ...faz a atualização dos dados através do método PUT.
         const response = await fetch(`http://localhost:3000/agendamento/${id}`, {
             method: 'PUT',
             headers: {
@@ -114,8 +117,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (response.ok) {
             alert('Atualização de agendamento feita com sucesso.')
+            // Após a conclusão do processo de edição, os inputs e os selects ficam desabilitados.
             inputs.forEach(input => input.disabled = true)
             selects.forEach(select => select.disabled = true)
+            // O botão "Salvar" vira "Editar".
             div.querySelector('.btnEditar').style.display = 'inline'
             div.querySelector('.btnSalvar').style.display = 'none'
         } else {
@@ -123,7 +128,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Deleta um item da lista de agendamentos
+    // Deleta um item da lista de agendamentos após o clique no botão de deletar.
+    // Também deleta os dados referente a aquele item no banco de dados através do método DELETE.
     window.deletarAgendamentos = async (id) => {
         const response = await fetch(`http://localhost:3000/agendamento/${id}`, {
             method: 'DELETE',
